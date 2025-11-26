@@ -1,20 +1,33 @@
+import os,sys
+import string
+from optparse import OptionParser
+import glob
+import json
 import subprocess
-import sys
-import os
+
+__version__="1.0"
+__status__ = "Dev"
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from tutils.parser import standard_parser, parse_server
-from tutils.config import get_config
-
 
 def main() -> None:
 
-    parser, server_list = standard_parser()
-    options = parser.parse_args()
-    server = parse_server(parser=parser, server=options.server, server_list=server_list)
+    usage = "\n%prog  [options]"
+    parser = OptionParser(usage,version="%prog version___")
+    parser.add_option("-s","--server",action="store",dest="server",help="dev/tst/beta/prd")
+    (options,args) = parser.parse_args()
+
+    for key in ([options.server]):
+        if not (key):
+            parser.print_help()
+            sys.exit(0)
+
+    server = options.server
+
+    config_obj = json.loads(open("./config.json", "r").read())
 
     ### get config info for docker container creation
-    config_obj = get_config()
     api_image = f"{config_obj['project']}_{server}"
     api_container_name = f"running_{api_image}"
     api_port = config_obj["api_port"][server]
