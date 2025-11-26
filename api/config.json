@@ -1,0 +1,10 @@
+{
+    "project": "glygen_ai_api",
+    "env_file": "glygen_llm_api.env",
+    "api_port": {
+        "prd": "7571",
+        "beta": "7573",
+        "tst": "7575",
+        "dev": "7577"
+    }
+}

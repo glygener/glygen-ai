@@ -1,0 +1,71 @@
+import subprocess
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from tutils.parser import standard_parser, parse_server
+from tutils.config import get_config
+
+
+def main() -> None:
+
+    parser, server_list = standard_parser()
+    options = parser.parse_args()
+    server = parse_server(parser=parser, server=options.server, server_list=server_list)
+
+    ### get config info for docker container creation
+    config_obj = get_config()
+    api_image = f"{config_obj['project']}_{server}"
+    api_container_name = f"running_{api_image}"
+    api_port = config_obj["api_port"][server]
+    env_file = config_obj["env_file"]
+
+    ### create and populate command list
+    cmd_list = []
+
+    # command to package the api
+    # cmd_list.append("python setup.py bdist_wheel")
+    # if no python error, use below line
+    cmd_list.append('python3 setup.py bdist_wheel')
+
+    cmd_list.append(f"docker build --no-cache -t {api_image} .")
+
+    # create the command to delete the api container if it already exists
+    container_id = (
+        subprocess.getoutput(f"docker ps --all | grep {api_container_name}")
+        .split(" ")[0]
+        .strip()
+    )
+    if container_id.strip() != "":
+        cmd_list.append(f"docker rm -f {container_id}")
+
+    # create the command to create the api docker container
+    cmd = f"docker create --name {api_container_name} -p 127.0.0.1:{api_port}:80"
+    cmd += f" -e SERVER={server} --env-file {env_file} {api_image}"
+    cmd_list.append(cmd)
+
+    def run_command(cmd):
+        # result = subprocess.run(
+        #     cmd,
+        #     shell=True,
+        #     text=True,
+        #     encoding="utf-8",
+        #     errors="replace",
+        #     capture_output=True,
+        # )
+        # for python 3.6 and below, use below line
+        result = subprocess.run(cmd, shell = True, universal_newlines = True, errors = 'replace', stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        if result.returncode != 0:
+            print(
+                f"Command failed with error code {result.returncode}: {result.stderr}"
+            )
+        else:
+            print(result.stdout)
+
+    # run the commands
+    for cmd in cmd_list:
+        run_command(cmd)
+
+
+if __name__ == "__main__":
+    main()

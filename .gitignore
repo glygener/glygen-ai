@@ -24,6 +24,7 @@ collision_reports/
 .vscode/
 mypy.ini
 scratch/
+*.whl
 
 # User-specific files
 *.rsuser
@@ -438,3 +439,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+*.DS_Store
