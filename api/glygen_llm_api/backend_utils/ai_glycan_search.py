@@ -216,6 +216,10 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
 
         biomarker_disease = search_params.get('biomarker_disease')
         biomarker_type = search_params.get('biomarker_type')
+
+        if  biomarker_disease is not None or biomarker_type is not None:
+           mapped_parameters["biomarker"] = {}
+
         if  biomarker_disease is not None:
            mapped_parameters["biomarker"]["disease_name"] = biomarker_disease
 
