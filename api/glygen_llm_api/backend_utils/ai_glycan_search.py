@@ -186,6 +186,10 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
         if  enzyme is not None:
             mapped_parameters["enzyme"] = {"id":enzyme, "type":"gene"}
 
+        id_namespace = search_params.get('glycan_id_namespace')
+        if  id_namespace is not None:
+            mapped_parameters["id_namespace"] = id_namespace
+
         glycan_type = search_params.get('glycan_type')
         if  glycan_type is not None:
             mapped_parameters["glycan_type"] = glycan_type

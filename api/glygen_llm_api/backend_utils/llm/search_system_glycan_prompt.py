@@ -37,6 +37,6 @@ Here is a couple example queries and expected responses:
         Response: "{\"glycan_type\": \"N-linked\"}"
 
     Example 2:
-        User query: "Can you show me some glycans related glycosylated protein P14210 that are related to Human"
+        User query: "Can you show me some glycans related to glycosylated protein P14210 and Human species"
         Response: "{\"glycosylated_protein\": \"P14210\", \"organism_name_annotated\": \"Human\"}"
 """
