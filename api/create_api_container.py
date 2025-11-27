@@ -32,6 +32,12 @@ def main() -> None:
     api_container_name = f"running_{api_image}"
     api_port = config_obj["api_port"][server]
     env_file = config_obj["env_file"]
+    config_file = config_obj["auth_config"]
+    auth_config_obj = json.loads(open(config_file, "r").read())
+    LLM_PROVIDER = auth_config_obj[server]["LLM_PROVIDER"]
+    AI_SEARCH_MAX_REQUESTS_PER_HOUR = auth_config_obj[server]["AI_SEARCH_MAX_REQUESTS_PER_HOUR"]
+    AI_SEARCH_STATIC_BEARER_TOKEN = auth_config_obj[server]["AI_SEARCH_STATIC_BEARER_TOKEN"]
+    LLM_API_KEY = auth_config_obj[server]["LLM_API_KEY"]
 
     ### create and populate command list
     cmd_list = []
@@ -54,6 +60,10 @@ def main() -> None:
 
     # create the command to create the api docker container
     cmd = f"docker create --name {api_container_name} -p 127.0.0.1:{api_port}:80"
+    cmd += f" -e LLM_PROVIDER={LLM_PROVIDER}  -e AI_SEARCH_MAX_REQUESTS_PER_HOUR={AI_SEARCH_MAX_REQUESTS_PER_HOUR}"
+    cmd += f" -e LLM_API_KEY={LLM_API_KEY}"
+    # cmd += f" -e AI_SEARCH_STATIC_BEARER_TOKEN={AI_SEARCH_STATIC_BEARER_TOKEN}  -e LLM_API_KEY={LLM_API_KEY}"
+    # cmd += f" -e SERVER={server} {api_image}"
     cmd += f" -e SERVER={server} --env-file {env_file} {api_image}"
     cmd_list.append(cmd)
 

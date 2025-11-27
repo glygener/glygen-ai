@@ -14,7 +14,7 @@ from .backend_utils import ai_protein_search
 from .token_validation import token_required
 
 
-api = Namespace("ai", description="GlyGen AI API namespace.")
+api = Namespace("search", description="GlyGen Search AI API namespace.")
 
 
 # class FullSearch(Resource):
@@ -114,5 +114,5 @@ class AIFullProteinSearch(Resource):
 
 # api.add_resource(FullSearch, "/search")
 # api.add_resource(List, "/list")
-api.add_resource(AIFullGlycanSearch, "/glycan_search")
-api.add_resource(AIFullProteinSearch, "/protein_search")
+api.add_resource(AIFullGlycanSearch, "/glycan")
+api.add_resource(AIFullProteinSearch, "/protein")

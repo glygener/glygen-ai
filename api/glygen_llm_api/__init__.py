@@ -61,7 +61,7 @@ class CustomApi(Api):
         schema["tags"] = ns
 
         # Optionally set a base path override here
-        # schema["basePath"] = "/api"
+        schema["basePath"] = "/ai"
 
         return schema
 
