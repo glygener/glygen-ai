@@ -230,8 +230,6 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
         if  biomarker_type is not None:
             mapped_parameters["biomarker"]["type"] = biomarker_type
 
-        # print("mapped: " + json.dumps(mapped_parameters))
-
         return mapped_parameters, 200
 
     except Exception as e:

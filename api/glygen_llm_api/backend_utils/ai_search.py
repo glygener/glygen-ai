@@ -129,8 +129,6 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
             "query_type": "search_glycan",
         }
 
-        print(json.dumps(query))
-
         if  search_params.get('mass_minimum') or search_params.get('mass_maximum'):
             mapped_parameters["mass"] = {
                 min: int(search_params.get('mass_minimum', 0)),

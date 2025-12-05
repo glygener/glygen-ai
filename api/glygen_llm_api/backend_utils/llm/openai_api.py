@@ -19,7 +19,7 @@ class OpenAILLM(LLM):
     ):
         super().__init__(api_key_name, type, max_tokens, max_retries)
         self.instance = openai.OpenAI(api_key=self._api_key)
-        super().__init__(api_key_name)
+        super().__init__(api_key_name, type, max_tokens, max_retries)
 
     def advanced_search(self, query: str) -> Optional[Dict]:
 
@@ -63,6 +63,4 @@ class OpenAILLM(LLM):
             except Exception as e:
                 sleep((i + 1) ** 2)
 
-        # print("response: " + response_text)
-        # print(validated_response)
         return validated_response

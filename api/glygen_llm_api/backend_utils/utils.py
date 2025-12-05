@@ -15,7 +15,6 @@ from user_agents import parse
 
 def get_is_bot(api_request: Request):
     user_agent = parse(api_request.headers.get("User-Agent"))
-    print(user_agent.is_bot)
     return user_agent.is_bot
 
 def get_request_object(api_request: Request, endpoint: str) -> Tuple[Dict, int]:

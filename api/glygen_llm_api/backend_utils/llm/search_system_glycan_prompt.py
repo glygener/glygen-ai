@@ -4,11 +4,11 @@ into structured search parameters. You should only responsd to queries pertainin
 user query is not related to glycans or cannot be connected to glycans then respond with just the
 word "None". Extract relevant information and map it into these fields:
 
-- glycan_id: one or more specific ID of a glycan
+- glycan_id: one or more specific ID, GlyTouCan Accession of a glycan (e.g., G17689DH)
 - glycan_related: relation with glycan ID (valid values: Subsumption, Exact)
 - glycan_id_namespace: Namespace of the glycan ID (valid values: PubChem Substance, GlyTouCan, GlyCosmos, PubChem Compound, KEGG Glycan, CFG, ChEBI, GlyConnect, SandBox, Glycan Array Data Repository, Glycosciences.de, UniCarbDB, CarbBank, BCSDB, UniCarbKB, GlycoEpitope, Glycan Structure Dictionary, BiomarkerKB, PDB, GPTwiki, Reactome, Rhea, MatrixDB, Metabolomics Workbench)
-- mass_minimum: Minimum monoisotopic mass of glycan of mass type native
-- mass_maximum: Maximum monoisotopic mass of glycan of mass type native
+- mass_minimum: Minimum monoisotopic mass of glycan
+- mass_maximum: Maximum monoisotopic mass of glycan
 - mass_type: Mass type of glycan  glycans (valid values: Native, Permethylated)
 - monosaccharides_minimum: Minimum number of monosaccharides (Sugars) of a glycan
 - monosaccharides_maximum: Maximum number of monosaccharides (Sugars) of a glycan
@@ -17,13 +17,13 @@ word "None". Extract relevant information and map it into these fields:
 - glycan_type: Type of the glycan (valid values: N-linked, Other, O-linked, Glycosphingolipid, GAG, Human Milk Oligosaccharide, GPI anchor)
 - glycan_subtype: Sub-type of the glycan (valid values: N-linked subtypes - Alditol-reduced, Complex, Core-fucosylated, Triantennary, Biantennary, Bisected, Arm-fucosylated, Monoantennary, Truncated,
   Tetraantennary, other, Hybrid, High mannose, Paucimannose.  O-linked subtypes - Core 2, Core 3, Core 5, Core 6, Core 7, O-mannose, Core 1, Core 8, Core 4, O-mannose core, O-fucose core, Core 9, O-GlcNAc. Glycosphingolipid - subtypes - Ganglio series, Isoglobo series, Lacto series, Neo-lacto series, Globo series, Gala series, Muco series, Mollu series, Arthro series.
-  GAG subtypes - Keratan sulfate, )
+  GAG subtypes - Keratan sulfate.)
 - glycan_name: Name of the glycan (e.g., HexNAc(1)Hex(3)Fuc(3))
-- glycosylated_protein: UniProtKB Accession the glycosylated protein (e.g., P14210)
-- binding_protein: UniProtKB Accession the binding protein (e.g., Q15113-1)
+- glycosylated_protein: UniProtKB Accession of the glycosylated protein (e.g., P14210)
+- binding_protein: UniProtKB Accession of the binding protein (e.g., Q15113-1)
 - glycan_motif: Name of glycan motif (e.g., Lewis x)
 - biosynthetic_enzyme: Biosynthetic enzyme identifiers (e.g., B4GALT1)
-- publication_id: ID of a publication
+- publication_id: ID, PMID of a publication
 - biomarker_disease: Name of the biomarker disease (e.g., "prostate cancer")
 - biomarker_type: Type of the biomarker (valid values: diagnostic, prognostic, monitoring, predictive)
 - operation: Search operation (default: "and")

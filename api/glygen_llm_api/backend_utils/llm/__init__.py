@@ -38,16 +38,72 @@ class LLM(ABC):
     def advanced_search(self, query: str) -> Optional[Dict]:
         pass
 
+    def handle_protein_data_special_cases(self, response):
+        try:
+            # special case to handle multiple uniprot_canonical_ac
+            uniprot_canonical_ac = response.get("uniprot_canonical_ac")
+            if uniprot_canonical_ac is not None and isinstance(uniprot_canonical_ac, list):
+                response["uniprot_canonical_ac"] = ",".join(uniprot_canonical_ac)
+            
+            # special case to handle single amino acid before validating response
+            glycosylated_aa = response.get("glycosylated_aa")
+            if glycosylated_aa is not None and isinstance(glycosylated_aa, str):
+                if "," in glycosylated_aa:
+                    response["glycosylated_aa"] = [item.strip() for item in glycosylated_aa.split(',')]
+                else:
+                    my_list = []
+                    my_list.append(glycosylated_aa)
+                    response["glycosylated_aa"] = my_list
+
+            # special case to handle organism name before validating response
+            organism_name = response.get("organism_name")
+            if organism_name is not None and isinstance(organism_name, str):
+                if "," in organism_name:
+                    my_list = [item.strip() for item in organism_name.split(',')]
+                    if len(my_list) > 0:
+                        response["organism_name"] = my_list[0]
+            elif organism_name is not None and isinstance(organism_name, list):
+                if len(my_list) > 0:
+                    response["organism_name"] = organism_name[0]
+
+        except Exception as e:
+            pass
+
+        return response
+    
+    def handle_glycan_data_special_cases(self, response):
+        try:
+            # special case to handle multiple glycan_id
+            glycan_id = response.get("glycan_id")
+            if glycan_id is not None and isinstance(glycan_id, list):
+                response["glycan_id"] = ",".join(glycan_id)
+            
+            # special case to handle single organism name before validating response
+            organism_name = response.get("organism_name")
+            if organism_name is not None and isinstance(organism_name, str):
+                if "," in organism_name:
+                    response["organism_name"] = [item.strip() for item in organism_name.split(',')]
+                else:
+                    my_list = []
+                    my_list.append(organism_name)
+                    response["organism_name"] = my_list
+        except Exception as e:
+            pass
+
+        return response
+
     def validate_advanced_search_response(
         self, llm_response: str
     ) -> Tuple[bool, Optional[Dict], Optional[str]]:
         try:
             response = json.loads(llm_response)
             if self._type == "protein":
+                response = self.handle_protein_data_special_cases(response)
                 validated_response = ProteinSearchFullSchema().load(response, unknown=EXCLUDE)
             else:
+                response = self.handle_glycan_data_special_cases(response)
                 validated_response = GlycanSearchFullSchema().load(response, unknown=EXCLUDE)
-            
+
             if not isinstance(validated_response, dict):
                 return False, None, "Response is not valid Python dictionary"
             return True, validated_response, None
