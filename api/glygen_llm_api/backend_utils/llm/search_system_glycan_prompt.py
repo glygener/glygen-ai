@@ -22,7 +22,7 @@ word "None". Extract relevant information and map it into these fields:
 - glycosylated_protein: UniProtKB Accession of the glycosylated protein (e.g., P14210)
 - binding_protein: UniProtKB Accession of the binding protein (e.g., Q15113-1)
 - glycan_motif: Name of glycan motif (e.g., Lewis x)
-- biosynthetic_enzyme: Biosynthetic enzyme identifiers (e.g., B4GALT1)
+- biosynthetic_enzyme: Biosynthetic enzyme, protein identifiers. Used to synthesise glycans (e.g., B4GALT1, Q91X88)
 - publication_id: ID, PMID of a publication
 - biomarker_disease: Name of the biomarker disease (e.g., "prostate cancer")
 - biomarker_type: Type of the biomarker (valid values: diagnostic, prognostic, monitoring, predictive)
