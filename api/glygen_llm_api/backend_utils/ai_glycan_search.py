@@ -135,7 +135,13 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
                 if min > max:
                     temp = max
                     max = min
-                    min = temp 
+                    min = temp
+                elif min == max:
+                    if min >= (150 + 10):
+                        min -= 10
+                    if max <= (6751 - 10):
+                        max += 10
+
                 mapped_parameters["mass"] = {
                     "min": min,
                     "max": max
@@ -147,7 +153,13 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
                 if min > max:
                     temp = max
                     max = min
-                    min = temp 
+                    min = temp
+                elif min == max:
+                    if min >= (206 + 10):
+                        min -= 10
+                    if max <= (8307 - 10):
+                        max += 10
+
                 mapped_parameters["mass"] = {
                     "min": min,
                     "max": max
@@ -162,7 +174,13 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
             if min > max:
                 temp = max
                 max = min
-                min = temp 
+                min = temp
+            elif min == max:
+                if min >= (1 + 2):
+                    min -= 2
+                if max <= (37 - 2):
+                    max += 2
+
             mapped_parameters["number_monosaccharides"] = {
                 "min": min,
                 "max": max

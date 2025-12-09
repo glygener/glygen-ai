@@ -153,6 +153,12 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
                 temp = max
                 max = min
                 min = temp 
+            elif min == max:
+                if min >= (260 + 50):
+                    min -= 50
+                if max <= (4007076 - 50):
+                    max += 50
+
             mapped_parameters["mass"] = {
                 "min": min,
                 "max": max
