@@ -1,6 +1,5 @@
 {
     "project": "glygen_ai_api",
-    "env_file": "glygen_llm_api.env",
     "auth_config": "/data/shared/glygen/auth/glygen_ai_container_api_key.json",
     "api_port": {
         "prd": "7571",
