@@ -175,11 +175,6 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
                 temp = max
                 max = min
                 min = temp
-            elif min == max:
-                if min >= (1 + 2):
-                    min -= 2
-                if max <= (37 - 2):
-                    max += 2
 
             mapped_parameters["number_monosaccharides"] = {
                 "min": min,
