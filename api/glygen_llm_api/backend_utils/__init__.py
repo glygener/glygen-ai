@@ -37,7 +37,7 @@ TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S %Z%z"
 TIMEZONE = "US/Eastern"
 
 # --- Contact Form Configuration ---
-CONTACT_SOURCE = "biomarkerpartnership"
+CONTACT_SOURCE = "myglygen"
 contact_recipients = os.getenv("CONTACT_RECIPIENTS")
 # if contact_recipients is None:
 #     current_app.api_logger.error(  # type: ignore

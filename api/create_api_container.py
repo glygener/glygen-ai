@@ -62,7 +62,7 @@ def main() -> None:
     cmd = f"docker create --name {api_container_name} -p 127.0.0.1:{api_port}:80"
     cmd += f" -e LLM_PROVIDER={LLM_PROVIDER}  -e AI_SEARCH_MAX_REQUESTS_PER_HOUR={AI_SEARCH_MAX_REQUESTS_PER_HOUR}"
     cmd += f" -e AI_SEARCH_STATIC_BEARER_TOKEN={AI_SEARCH_STATIC_BEARER_TOKEN}  -e LLM_API_KEY={LLM_API_KEY}"
-    cmd += f" -e DATA_PATH={data_path} -e SERVER={server} {api_image}"
+    cmd += f" -e DATA_PATH={data_path} -e SERVER={server} -v {data_path}:{data_path} {api_image}"
     cmd_list.append(cmd)
 
     def run_command(cmd):
