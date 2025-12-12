@@ -1,6 +1,7 @@
 {
     "project": "glygen_ai_api",
     "auth_config": "/data/shared/glygen/auth/glygen_ai_container_api_key.json",
+    "data_path": "/data/shared/glygen/",
     "api_port": {
         "prd": "7571",
         "beta": "7573",

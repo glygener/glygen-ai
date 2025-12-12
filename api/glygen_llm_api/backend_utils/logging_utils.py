@@ -24,7 +24,7 @@ from . import (
     CONTACT_RECIPIENTS,
 )
 from .db import create_timestamp, cast_app
-from .auth_utils import _send_email
+# from .auth_utils import _send_email
 
 # Prevents blocking the main request thread for logging I/O, might consider increasing
 # max_workers in the future, however we would have to consider SQLite write contention
@@ -67,17 +67,17 @@ def get_api_log_db():
                 f"Error Details: {e}\n\n"
                 f"Please investigate the server's file system permissions and database integrity."
             )
-            email_send_error = _send_email(
-                subject=email_subject, body=email_body, recipients=CONTACT_RECIPIENTS
-            )
-            if email_send_error:
-                app.api_logger.error(
-                    f"Failed to send critical logging DB connection failure email notification: {email_send_error}"
-                )
-            else:
-                app.api_logger.info(
-                    "Successfully sent email notification about log DB connection failure."
-                )
+            # email_send_error = _send_email(
+            #     subject=email_subject, body=email_body, recipients=CONTACT_RECIPIENTS
+            # )
+            # if email_send_error:
+            #     app.api_logger.error(
+            #         f"Failed to send critical logging DB connection failure email notification: {email_send_error}"
+            #     )
+            # else:
+            #     app.api_logger.info(
+            #         "Successfully sent email notification about log DB connection failure."
+            #     )
 
     return g.log_db
 
@@ -174,6 +174,7 @@ def frontend_log(api_request: Request) -> Tuple[Dict, int]:
 
 def api_log(
     request_object: Optional[Dict],
+    response_data:  str,
     endpoint: str,
     api_request: Request,
     duration: float,
@@ -187,6 +188,8 @@ def api_log(
     ----------
     request_object: dict or None
         The parsed query string parameters associated with the API call (if applicable).
+    response: dict or None
+        The query response.
     endpoint: str
         The endpoint the request came in for.
     api_request: Request
@@ -211,6 +214,9 @@ def api_log(
             "endpoint": endpoint,
             "request": (
                 json.dumps(request_object) if request_object is not None else None
+            ),
+            "response": (
+                response_data if response_data is not None else None
             ),
             "user_agent": user_agent_string,
             "referer": api_request.headers.get("Referer"),

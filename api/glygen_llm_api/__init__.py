@@ -11,11 +11,12 @@ from pymongo import MongoClient
 import os
 import sys
 import time
+import json
 from typing import Dict, List
 
-from .backend_utils import CustomFlask
-# from .backend_utils import logging_utils
-# from .backend_utils.performance_logger import PerformanceLogger
+from .backend_utils import CustomFlask, init_api_log_db, setup_logging
+from .backend_utils import logging_utils
+from .backend_utils.performance_logger import PerformanceLogger
 from .glygen_llm_api import api as glygen_llm_api
 # from .auth import api as auth_api
 # from .log import api as log_api
@@ -73,44 +74,55 @@ def create_app():
     app = CustomFlask(__name__)
 
     # --- Logging Setup ---
-    # app.api_logger = setup_logging()
-    # app.api_logger.info("API Started")
+    app.api_logger = setup_logging()
+    app.api_logger.info("API Started")
 
     # Initialize the SQLite database for API request logging
-    # api_log_db_status, api_log_db_msg = init_api_log_db()
-    # if api_log_db_status:
-    #     app.api_logger.info(api_log_db_msg)
-    # else:
-    #     app.api_logger.error(api_log_db_msg)
-    #     sys.exit(1)  # Exit if logging database initilization fails
+    api_log_db_status, api_log_db_msg = init_api_log_db()
+    if api_log_db_status:
+        app.api_logger.info(api_log_db_msg)
+    else:
+        app.api_logger.error(api_log_db_msg)
+        sys.exit(1)  # Exit if logging database initilization fails
 
-    # app.performance_logger = PerformanceLogger(logger=app.api_logger)
+    app.performance_logger = PerformanceLogger(logger=app.api_logger)
 
     # --- Request Hooks ---
-    # @app.before_request
-    # def start_timer():
-    #     """Start a timer before each request."""
-    #     g.start_time = time.time()
+    @app.before_request
+    def start_timer():
+        """Start a timer before each request."""
+        g.start_time = time.time()
 
-    # @app.after_request
-    # def log_request(response):
-    #     """Log API request details after each request is processed."""
-    #     duration = time.time() - g.start_time
-    #     logging_utils.api_log(
-    #         request_object=request.json if request.is_json else request.args.to_dict(),
-    #         endpoint=request.path,
-    #         api_request=request,
-    #         duration=duration,
-    #         status_code=response.status_code,
-    #     )
-    #     return response
+    @app.after_request
+    def log_request(response):
+        """Log API request details after each request is processed."""
+        response_data = '{}'
+        if response.content_type == "application/json":
+            # Get the current data as a Python dictionary
+            data = json.loads(response.get_data(as_text=True))
+            swagger = data.get('swagger')
+            if swagger is not None:
+                response_data = '{"swagger": "json response"}'
+            else:
+                response_data = json.dumps(data)
 
-    # @app.teardown_appcontext
-    # def close_db(e=None):
-    #     """Close the SQLite database connection when the app context ends."""
-    #     log_db = g.pop("log_db", None)
-    #     if log_db is not None:
-    #         log_db.close()
+        duration = time.time() - g.start_time
+        logging_utils.api_log(
+            request_object=request.json if request.is_json else request.args.to_dict(),
+            response_data=response_data,
+            endpoint=request.path,
+            api_request=request,
+            duration=duration,
+            status_code=response.status_code,
+        )
+        return response
+
+    @app.teardown_appcontext
+    def close_db(e=None):
+        """Close the SQLite database connection when the app context ends."""
+        log_db = g.pop("log_db", None)
+        if log_db is not None:
+            log_db.close()
 
     # --- Extensions Initialization ---
     CORS(app)

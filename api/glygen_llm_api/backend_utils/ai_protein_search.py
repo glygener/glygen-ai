@@ -15,6 +15,24 @@ from .llm.rate_limiter import ai_search_rate_limiter
 def ai_full_search(api_request: Request) -> Tuple[Dict, int]:
     """Entry point for the AI-assisted search endpoint."""
 
+    request_arguments, request_http_code = utils.get_request_object(
+        api_request, "ai_search"
+    )
+    
+    if request_http_code != 200:
+        return request_arguments, request_http_code
+
+    user_query = request_arguments["query"]
+
+    # Check if query length is too long to avoid misuse.
+    if len(user_query) > 1000:
+        error_obj = db_utils.log_error(
+            error_log=f"Query length too long: \nquery: {user_query}",
+            error_msg="query_length_too_long",
+            origin="ai_full_search"
+        )
+        return error_obj, 401
+
     is_bot = utils.get_is_bot(api_request)
     if is_bot == True:
         error_obj = db_utils.log_error(
@@ -24,14 +42,6 @@ def ai_full_search(api_request: Request) -> Tuple[Dict, int]:
         )
         return error_obj, 401
 
-    request_arguments, request_http_code = utils.get_request_object(
-        api_request, "ai_search"
-    )
-    
-    if request_http_code != 200:
-        return request_arguments, request_http_code
-
-    user_query = request_arguments["query"]
 
     # Check rate limit before proceeding
     if not ai_search_rate_limiter.can_make_request():

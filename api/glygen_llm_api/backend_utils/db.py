@@ -116,6 +116,7 @@ def log_error(error_log: str, error_msg: str, origin: str, **kwargs) -> Dict:
     dict
         The return JSON.
     """
+    custom_app = cast_app(current_app)
 
     def _create_error_id(
         size: int = 6, chars: str = string.ascii_uppercase + string.digits
@@ -124,6 +125,22 @@ def log_error(error_log: str, error_msg: str, origin: str, **kwargs) -> Dict:
         return "".join(random.choice(chars) for _ in range(size))
 
     error_id = _create_error_id()
+    error_object_to_log = {
+        "id": error_id,
+        "log": error_log,
+        "msg": error_msg,
+        "origin": origin,
+        "timestamp": create_timestamp(),
+    }
+
+    try:
+        custom_app.api_logger.error(
+            f"Error logged (ID: {error_id}): msg=`{error_msg}`, origin=`{origin}`\ndetails=`{error_log}`\nkwargs={pformat(kwargs)}"
+        )
+    except Exception as e:
+        custom_app.api_logger.critical(
+            f"CRITICAL: Failed to log error to MongoDB.\nOriginal Error Object: {error_object_to_log}\nLogger Error: {e}\n{traceback.format_exc()}"
+        )
 
     return _create_error_obj(error_id, error_msg, **kwargs)
 

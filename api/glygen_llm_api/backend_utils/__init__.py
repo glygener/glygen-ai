@@ -51,10 +51,9 @@ CONTACT_RECIPIENTS = ""
 API_CALL_LOG_TABLE = "api"
 FRONTEND_CALL_LOG_TABLE = "frontend"
 LOG_DB_PATH = (
-    f"{os.environ.get('DATA_PATH')}log_db/{os.environ.get('SERVER')}/api_logs.db"
+    f"{os.environ.get('DATA_PATH')}ai_api_logs/{os.environ.get('SERVER')}/api_logs.db"
 )
 os.makedirs(os.path.dirname(LOG_DB_PATH), exist_ok=True)
-
 # --- Authentication & API Keys Configuration ---
 admin_list = os.getenv("ADMIN_LIST")
 ADMIN_LIST = admin_list.split(",") if admin_list is not None else None
@@ -103,6 +102,7 @@ def init_api_log_db() -> Tuple[bool, str]:
                 date TEXT NOT NULL,
                 endpoint TEXT NOT NULL,
                 request TEXT,
+                response TEXT,
                 user_agent TEXT,
                 referer TEXT,
                 origin TEXT,
@@ -170,6 +170,6 @@ class CustomFlask(Flask):
     """Custome Flask application class providing type hints for application-specific attributes."""
 
     # mongo_db: Database
-    # api_logger: Logger
+    api_logger: Logger
     # performance_logger: PerformanceLogger
     # hit_score_config: Dict
