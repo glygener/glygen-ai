@@ -96,6 +96,9 @@ def create_app():
     @app.after_request
     def log_request(response):
         """Log API request details after each request is processed."""
+        if request.method == "OPTIONS":
+            return response
+        
         response_data = '{}'
         if response.content_type == "application/json":
             # Get the current data as a Python dictionary
