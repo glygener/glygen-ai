@@ -65,7 +65,7 @@ Steps for deploying source code to a server with script.
 
 + Move to folder "\api"
   ```
-  cd glygen-llm-api
+  cd api
   ```
 
 + Deploying code by running script. For 'sudo' command please use server password.
