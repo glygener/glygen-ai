@@ -73,19 +73,19 @@ Steps for deploying source code to a server with script.
     + For Test server:
       ```
       docker stop running_glygen_ai_api_tst
-      python3 create_api_container.py --server tst
+      python3 create_ai_api_container.py --server tst
       docker start running_glygen_ai_api_tst
       ```
     + For Beta server:
       ```
       docker stop running_glygen_ai_api_beta
-      python3 create_api_container.py --server beta
+      python3 create_ai_api_container.py --server beta
       docker start running_glygen_ai_api_beta
       ```
     + For Production server:
       ```
       docker stop running_glygen_ai_api_prd
-      python3 create_api_container.py --server prd
+      python3 create_ai_api_container.py --server prd
       docker start running_glygen_ai_api_prd
 
   You'll receive a message, stating the full container ID. If this is not the message, please contact your supervisor or Rene.
