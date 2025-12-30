@@ -141,6 +141,16 @@ def _map_glycosylation_evidence_type(glyco_evidence_input : str) -> str:
     glyco_evidence_type= glyco_evidence_dict.get(glyco_evidence_input.lower())
     return glyco_evidence_type
 
+def _map_organism_id(org_input : tuple) -> str:
+    org_list_dict = { 
+                        "pig": 9823, "bovine": 9913, "human": 9606, "mouse": 10090, "rat": 10116, "zebrafish": 7955,
+                        "chicken": 9031, "hamster": 10029, "sars-cov-2": 2697049, "yeast": 559292, "fruit fly": 7227, "arabidopsis": 3702,
+                        "cellular slime mold": 44689, "hcv-japanese": 11116, "hcov-sars": 694009, "hcv-h77": 63746
+                    }
+    
+    org_id = org_list_dict.get(org_input.lower())
+    return org_id
+
 def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
     """Parse a natural language query into structured search parameters using OpenAI."""
     try:
@@ -176,7 +186,8 @@ def _map_search_params_ai(query : dict) -> Tuple[Optional[Dict], int]:
 
         organism = search_params.get('organism_name')
         if organism is not None:
-            mapped_parameters["organism"] = {"name":organism}
+            org_id = _map_organism_id(organism)
+            mapped_parameters["organism"] = {"id": org_id, "name": organism}
 
         uniprot_canonical_ac = search_params.get('uniprot_canonical_ac')
         if  uniprot_canonical_ac is not None:
